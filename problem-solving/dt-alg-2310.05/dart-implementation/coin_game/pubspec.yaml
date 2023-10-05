@@ -1,0 +1,6 @@
+name: coin_game
+description: A Dart web application to calculate the maximum amount of money you can win with certainity in the CoinGame problem
+author: Parsaloi ft Bard
+
+dependencies:
+  dart:convert
