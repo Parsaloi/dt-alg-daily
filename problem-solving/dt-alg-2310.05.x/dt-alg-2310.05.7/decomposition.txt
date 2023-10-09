@@ -1,0 +1,194 @@
+
+-------------Programming problem 2310.05.7----------------
+Problem Class: Game thoery
+
+--__--[Restating the problem]__--__
+[-] Connect4 is a game where opponents take turns dropping 'red' or 'black' discs into a 7 x 6 vertically suspended grid.
+[+] Here we can see Connect4 is described as a game.
+[+] Which type of game is Connect4? Is it a two-person/zero-sum game? Is is a mixed-strategy game that can be represented using a graph? Is it both a zero-sum and mixed-strategy game?
+[+] Connect4 uses a 7 * 6 grid, meaning is there are a total of 42 cells in the grid where the opponets can drop a 'red' or 'black' disc.
+
+[-] The game ends either when one player creates a line of four consequtive discs of their color (horizontally, vertically, or diagonally), or when there are no more spots left in the grid
+[+] When the game starts, I'll initiate an event loop, where droping of either 'red' or 'black' discs by a player. 
+[+] A game situation would be when the first player drops a 'red' or 'black' disc to mark an event that initiates a game strategy for this player
+[+] Then a second event will follow where the next player drops a 'red' or 'black' disc
+[+] I will assume this is a two-person game
+[+] The event loop of an ongoing game terminates when the following two cases are satisfied:  
+[+] A player creates a line of four consequtive discs of the pure red discs or pure black discs in any straight direction, or
+[+] When all the 42 cells in the grid are filled 
+
+===========[MODELING SOLUTION SPACE]============
+
+[=] Let C represent the total number of cells in a Column in the Connect4 grid where c marks the intersection of a column and row (a unit cell), in this case C=7, where c = 0, 1, 2, 3, 4, 5, 6
+[=] Let R represent the total number of cells in a Row in the Connect4 grid where r marks the intersection of a row and a column (a unit cell), in this case R=6, where r = 0, 1, 2, 3, 4, 5
+
+6[][][][][][]
+5[][][][][][]
+4[][][][][][]
+3[][][][][][]
+2[][][][][][]
+1[][][][][][]
+0[][][][][][]
+ 0 1 2 3 4 5
+
+[=] Let X represent the 'red' disc
+[=] Let O represent the 'black' disc
+
+[=] Let us now map the different scenarios where a player "wins" the game
+
+[vertical] => X wins!
+
+[][][][][][]
+[][][X][][][]
+[][][X][][][]
+[][][X][][][]
+[][][X][][][]
+[][][][][][]
+[][][][][][]
+
+[vertical] => O wins!
+
+[][][][][][]
+[][][][][O][]
+[][][][][O][]
+[][][][][O][]
+[][][][][O][]
+[][][][][][]
+[][][][][][]
+
+
+[horizontal] => X wins!
+
+[][][][][][]
+[][][][][][]
+[][][][][][]
+[][X][X][X][X][]
+[][][][][][]
+[][][][][][]
+[][][][][][]
+
+
+[Horizontal] => O wins!
+
+[][][][][][]
+[][][][][][]
+[][][O][O][O][O]
+[][][][][][]
+[][][][][][]
+[][][][][][]
+[][][][][][]
+
+
+[Diagonal] => X wins!
+
+[][][][][][]
+[][][][][X][]
+[][][][X][][]
+[][][X][][][]
+[][X][][][][]
+[][][][][][]
+[][][][][][]
+
+[Diagonal] => O wins!
+
+
+[][][][][][]
+[][][][][][]
+[][][O][][][]
+[][][][O][][]
+[][][][][O][]
+[][][][][][O]
+[][][][][][]
+
+
+[FUNCTIONAL MODEL]
+[~] Intitiate an event loop; I will use a while() loop
+[~] Check if the Connect4 grid is fully populated?
+[~] How do we check if the grid is fully populated?
+[~] One way we could do this is by keeping track of cells in a 7 x 6 matrix represented with a 2-D array data structure
+[~] How would I traverse the 2-D array?
+[~] Traversing a an array means I'll play in the O(n) time complexity which I want to avoid
+[~] Instead I could use c * r variables which depict a unique cell as an identity to proactively keep track of the whole grid
+[~] What does it mean for the Connect4 grid to be fully populated in this case?
+[~] When all the cell identies are attached to a value, which in this case is either a 'red' or 'black' disc, then the 42 cells are fully populated and the event loop should terminate
+[~] I could use a Map/table datastructure to store all the indenties that either players drop either a 'red' or 'black' disc, where, 
+[~] The identity of a cell in the grid will be a key that maps a value which can either be 'red' or 'black'
+[~] I would use a boolean to represent player1 as the default switch and player2 as the alternate switch
+[~] I would use an enum type to represent the 'red' and 'black' as option arguments that the game funtions accepts
+[~] I would use a 2-D array matrix to draw the Connect4 grid that contains 42 cells
+[~] The left array dimension may represent column units c, where the total number of cells on this array is 7
+[~] And the right array dimension may represent row units r, where the total number of cells on this array is 6
+[~] c * r represents a single cell in the grid, so the grid I will draw resembles the following depiction
+
+[60][61][62][63][64][65]
+[50][51][52][53][54][55]
+[40][41][42][43][44][45]
+[30][31][32][33][34][35]
+[20][21][22][23][24][25]
+[10][11][12][13][14][15]
+[00][01][02][03][04][05]
+
+[~] Therefore, I would use the 2-D array data structure to obtain the identity of each of the 42 cells
+[~] Then I would present a vertically suspended Connect4 grid as a graphical tables on say a web page
+[~] How do I know which cell either player playing Connect4 on a graphical web user interface has dropped a disc of enum_type{RED, BLACK }?
+[~] An example of how I would draw this table on a web page would be as follows:
+[~] I would use the Html <table></table> tag to draw a table labelled <th>Connect4 Web Game<th>
+[~] I would then draw rows <tr><tr> as depicted below:
+
+<table>
+  <th>
+    Play Connect4 online
+    <tr>00</tr><tr>01</tr><tr>02</tr><tr>03</tr><tr>04</tr><tr>05</tr>
+    <tr>10</tr><tr>11</tr><tr>12</tr><tr>13</tr><tr>14</tr><tr>15</tr>
+    <tr>20</tr><tr>21</tr><tr>22</tr><tr>23</tr><tr>24</tr><tr>25</tr>
+    <tr>30</tr><tr>31</tr><tr>32</tr><tr>33</tr><tr>34</tr><tr>35</tr>
+    <tr>40</tr><tr>41</tr><tr>42</tr><tr>43</tr><tr>44</tr><tr>45</tr>
+    <tr>50</tr><tr>51</tr><tr>52</tr><tr>53</tr><tr>54</tr><tr>55</tr>
+    <tr>60</tr><tr>61</tr><tr>62</tr><tr>63</tr><tr>64</tr><tr>65</tr>
+  </th>
+  
+</table>
+
+[~] I will then identify all the individual cells in the Connect4 web table with a unique ID
+[~] I will map this ID to Hash table that maintains the ID as keys being mapped to a Boolean pair the represent the selection of the 'RED' dics which would be my 1, and
+[~] the selection of 'BLACK' which would be my 0
+[~] This means that I will additionally use two boxes on the web page to represent the two colored Disks{ RED, BLACK }
+[~] I will ID the corresponding tags on my HTML template representing the two colored boxes respectively
+[~] This will allow me to easiy map the graphical controllers/ event-triggers for either a player selecting a 'red' or 'black' disc in a gameplay of the Connect4 game for my backend Dart programm 
+[~] In case, you were wondering...(Yeah! I will implement the backend web service in Dart!)
+
+============[Simulating a Connect4 GamePlay]=============
+
+------------------For a command-line application-------------------
+*******Some Assumptions include*********
+1. The entry of the Connect4 CLI application is an empty 7 x 6 grid
+2. All the individual cells in the grid have identities that are keys mapping to boolean values of the selected disc a player drops on a specific cell
+3. The player randomly picks any cell in the grid
+
+**********Placeholder to these assumptions would be****************
+1. The CLI application initiates the game by printing an empty 7 x 6 grid on the terminal and appropriate instructions on how the game will be played or demonstrates an actual gameplay using a simulation
+2. The CLI application randomly generates unique values from a predefined range for all the identities that will uniquely identify indivual cells in the grid
+   I will store these radomly generated identities in an immutable data strucure during the entire period of the gameplay simulation/execution of the the game
+2.x The CLI appliacation keeps track of selected cells by a well defined mechanism and approrpriate data structures
+    For example, I could use a Hashtable to store identities as keys that map to a custom boolean pair type which represents the RED as true and BLACK as false
+    The game will first use a preset default player to randomly pick a disc { RED or BLACK } from a predefined option data structure of type enum
+    The game will then randomly select an identity from the temporarily held range of the already randomly generated indentities stored in the immutable data structure
+    We check if a randomly picked identity is marked as picked and if so, we switch the the alternating player and restart the game simulation, otherwise, we mark the identity as alreadyPicked and keep playing with the current player
+    (this part simulates real-time punishments during a live game where a player might try to drop a disc on an already occupied cell)
+    The game will store this randomly picked identity in a List to keep track of all the individual cells that already have a disc occupying it
+    The game will place the randomly picked disc on the randomly picked cell which was already picked from the immutable data structure
+    The game will then switch from the active player to the alternative player and repeat the gameplay in the alternative player's turn
+3. On every turn either player plays their chance, the game checks if the list tracking the cells has atleast 42 unique elements picked from the immutable data structure in order to terminate the game loop and print stalemate
+
+[LOGIC OF THE ACTUAL GAME]
+
+[~] Now we write the expression to check the case where there is clear winner of the game and cosequently terminate the game and print the winner
+
+[~] I would initiate player1 as the default starting player
+[~] Player1 would take their turn in dropping either a 'red' or 'black' disc on any cell
+[~] 
+
+
+--------------------For a web application-----------------------
+
+
